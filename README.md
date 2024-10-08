@@ -20,7 +20,9 @@
 
  ## Technology
  I will use Java to write Desktop SW program, Java.swing to create GUI, and Arduino Uno Rev3 debug board for development of server HW part. 
+ 
 --- 
+
  # Task 2: Creating Communication Between Java Client and Arduino Server
 
 This section outlines how to build the project for the Java client and the Arduino server.
