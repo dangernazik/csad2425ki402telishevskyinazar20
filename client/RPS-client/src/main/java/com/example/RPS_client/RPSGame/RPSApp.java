@@ -1,10 +1,14 @@
 package com.example.RPS_client.RPSGame;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import com.example.RPS_client.controller.GameController;
 import com.example.RPS_client.DTO.GameDTO;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -77,49 +81,55 @@ public class RPSApp extends Application {
 
         VBox vbox = new VBox(10, logoImageView, menuBar);
         Scene scene = new Scene(vbox, 300, 350);
+
+        // Додавання CSS-стилю
+        scene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
+
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
     }
 
+
     private void loadGame(File file) throws IOException {
         Gson gson = new Gson();
 
-        // Create a class to match the JSON structure
         class GameData {
             String Player1Name;
             String Player2Name;
             String Player1Move;
             String Player2Move;
-            String Winner; // This can be null if the game is ongoing
+            String Winner; // This can be null or empty if the game is ongoing
         }
 
-        // Read the JSON data from the file
+        // Check if the file exists and is readable
+        if (file == null || !file.exists()) {
+            System.out.println("File does not exist: " + (file != null ? file.getAbsolutePath() : "null"));
+            return;
+        }
+
         try (Reader reader = new FileReader(file)) {
             GameData gameData = gson.fromJson(reader, GameData.class);
 
-            // Check if the game has a winner
-            if (gameData.Winner != null && !gameData.Winner.isEmpty()) {
-                throw new IllegalStateException("Game is already finished");
+            // Check if gameData is null
+            if (gameData == null) {
+                System.out.println("No game data found or JSON is malformed.");
+                return; // Exit the method early if there's an issue
             }
 
-            // Initialize players with their names and moves
-            player1 = new RPSPlayer(); // Use the default constructor
-            player2 = new RPSPlayer(); // Use the default constructor
+            // Output each field, checking for nulls and empty strings
+            System.out.println("Player 1 Name: " + (gameData.Player1Name != null ? gameData.Player1Name : "Not Provided"));
+            System.out.println("Player 2 Name: " + (gameData.Player2Name != null ? gameData.Player2Name : "Not Provided"));
+            System.out.println("Player 1 Move: " + (gameData.Player1Move != null && !gameData.Player1Move.isEmpty() ? gameData.Player1Move : "Not Made"));
+            System.out.println("Player 2 Move: " + (gameData.Player2Move != null && !gameData.Player2Move.isEmpty() ? gameData.Player2Move : "Not Made"));
+            System.out.println("Winner: " + (gameData.Winner != null && !gameData.Winner.isEmpty() ? gameData.Winner : "Game Ongoing"));
 
-            player1.setName(gameData.Player1Name);
-            player2.setName(gameData.Player2Name);
-
-            String player1Move = gameData.Player1Move;
-            String player2Move = gameData.Player2Move;
-
-            if (player1Move != null && !player1Move.isEmpty()) {
-                player1.setMove(RPSPlayer.Move.valueOf(player1Move));
-            }
-
-            if (player2Move != null && !player2Move.isEmpty()) {
-                player2.setMove(RPSPlayer.Move.valueOf(player2Move));
-            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        } catch (JsonSyntaxException e) {
+            System.out.println("Error parsing JSON: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred while processing the file: " + e.getMessage());
         }
     }
 
@@ -151,6 +161,7 @@ public class RPSApp extends Application {
 
         VBox modeLayout = new VBox(10, manVsManButton, manVsAIButton, aiVsAIButton);
         Scene modeScene = new Scene(modeLayout, 300, 200);
+        modeScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         modeStage.setScene(modeScene);
         modeStage.show();
     }
@@ -208,6 +219,7 @@ public class RPSApp extends Application {
         });
 
         Scene gameScene = new Scene(grid, 500, 300);
+        gameScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         gameStage.setScene(gameScene);
         gameStage.show();
 
@@ -239,6 +251,7 @@ public class RPSApp extends Application {
 
         VBox nicknameLayout = new VBox(10, player1NameField, player2NameField, confirmButton);
         Scene nicknameScene = new Scene(nicknameLayout, 300, 200);
+        nicknameScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         nicknameStage.setScene(nicknameScene);
         nicknameStage.show();
     }
@@ -315,6 +328,7 @@ public class RPSApp extends Application {
         });
 
         Scene gameScene = new Scene(grid, 500, 300);
+        gameScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         gameStage.setScene(gameScene);
         gameStage.show();
 
@@ -351,7 +365,7 @@ public class RPSApp extends Application {
         Label resultLabel = new Label();
         grid.add(resultLabel, 0, 3, 3, 1);
 
-        Button saveButton = new Button("Save");
+        Button saveButton = new Button("Save to Json");
         grid.add(saveButton, 0, 4, 3, 1);
 
         if (isLoaded) {
@@ -441,19 +455,28 @@ public class RPSApp extends Application {
         });
 
         Scene gameScene = new Scene(grid, 500, 300);
+        gameScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         gameStage.setScene(gameScene);
         gameStage.show();
     }
 
     private void saveGameResult(File file, String result, RPSPlayer player1, RPSPlayer player2) throws IOException {
+        // Create a GsonBuilder to enable pretty printing
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> gameData = new HashMap<>();
+
+        gameData.put("Player1Name", player1.getName());
+        gameData.put("Player2Name", player2.getName());
+        gameData.put("Player1Move", player1.getMove() != null ? player1.getMove().name() : null);
+        gameData.put("Player2Move", player2.getMove() != null ? player2.getMove().name() : null);
+        gameData.put("Winner", result);
+
+        // Convert the game data to a pretty-printed JSON string
+        String json = gson.toJson(gameData);
+
+        // Write the pretty-printed JSON to the specified file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("{\n"); // Початок JSON-об'єкта
-            writer.write("  \"Player1Name\": \"" + player1.getName() + "\",\n");
-            writer.write("  \"Player2Name\": \"" + player2.getName() + "\",\n");
-            writer.write("  \"Player1Move\": \"" + (player1.getMove() != null ? player1.getMove().name() : "") + "\",\n");
-            writer.write("  \"Player2Move\": \"" + (player2.getMove() != null ? player2.getMove().name() : "") + "\",\n");
-            writer.write("  \"Winner\": \"" + result + "\"\n");
-            writer.write("}\n"); // Кінець JSON-об'єкта
+            writer.write(json);
         }
     }
 
