@@ -119,7 +119,7 @@ A PowerShell script is included to streamline the build process for both the Jav
 
 3. **Run the Build Script**: Execute the script to build the client and server:
    ```powershell
-   .\build_and_run.ps1
+   .\localCI.ps1
    ```
    This script will automatically compile the Java client, package it into a JAR file, compile the Arduino code, and upload it to the connected Arduino device.
 
