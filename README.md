@@ -67,3 +67,66 @@ To run the Arduino server, follow these steps:
 1. In the Arduino IDE, after client project started select the appropriate board and port, then click the **Upload** button (right arrow icon) to upload the code to the Arduino.
 
 Once both the Java client and the Arduino server are running, they will be able to communicate with each other. For any further assistance, please refer to the documentation or contact support.
+
+# Task 3: Implementing a Rock-Paper-Scissors Game with Java GUI Client and Arduino Server
+
+In this section, we will detail the steps to create a fully functional Rock-Paper-Scissors game, incorporating a Java client with a graphical user interface (GUI) and an Arduino server. We will also provide instructions for using a local PowerShell script to build and deploy the entire project seamlessly.
+
+## 1. Overview of the Project Structure
+
+The project consists of two main components:
+
+- **Java Client**: A desktop application with a GUI that allows players to select their moves and view game results.
+- **Arduino Server**: A microcontroller that manages game logic and communicates with the Java client.
+
+## 2. Setting Up the Java GUI Client
+
+### Designing the User Interface
+1. **Create the GUI**: The Java client uses JavaFX to create an interactive user interface. Ensure you have the necessary JavaFX libraries integrated into your project.
+
+2. **Implement Game Logic**: The client should handle user inputs and send selected moves to the Arduino server. Use sockets for communication.
+
+### Building the Java Client
+To build the Java client, perform the following:
+
+1. **Open Command Line**: Navigate to the root directory of your Java project.
+
+2. **Compile and Package**: Execute the commands:
+   ```bash
+   mvn clean compile
+   mvn package
+   ```
+
+## 3. Setting Up the Arduino Server
+
+### Programming the Arduino
+1. **Open the Arduino IDE**: Load the `RPS-server.ino` file located in the `/server/RPS-server` folder.
+
+2. **Implement Communication Protocol**: The server should be programmed to receive moves from the client, determine the winner, and send back the results.
+
+3. **Upload the Code**: Once your code is ready, select the appropriate board and port in the Arduino IDE and click the **Upload** button.
+
+## 4. Using the PowerShell Build Script
+
+A PowerShell script is included to streamline the build process for both the Java client and Arduino server. Follow these steps:
+
+1. **Launch PowerShell**: Open PowerShell on your Windows machine.
+
+2. **Navigate to Project Directory**: Change to the project’s root directory:
+   ```powershell
+   cd "D:\path\to\your\project\csad2425ki402telishevskyinazar20"
+   ```
+
+3. **Run the Build Script**: Execute the script to build the client and server:
+   ```powershell
+   .\build_and_run.ps1
+   ```
+   This script will automatically compile the Java client, package it into a JAR file, compile the Arduino code, and upload it to the connected Arduino device.
+
+## 5. Running the Game
+
+1. **Start the Arduino Server**: Ensure the Arduino is connected and the code is uploaded.
+
+2. **Launch the Java Client**: Run the `Main.java` file from your IDE or use the packaged JAR.
+
+Once both components are running, the Java client will communicate with the Arduino server, allowing players to enjoy the Rock-Paper-Scissors game. For additional help, please consult the documentation or reach out for support.
