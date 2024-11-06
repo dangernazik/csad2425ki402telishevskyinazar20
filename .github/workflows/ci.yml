@@ -33,5 +33,5 @@ jobs:
 
       - name: Run PowerShell CI Script
         run: |
-          pwsh -File .github/scripts/ci_script.ps1 -ComPort "" -BaudRate ""
+          pwsh -File .github/scripts/localCI.ps1 -ComPort "" -BaudRate ""
         shell: pwsh
