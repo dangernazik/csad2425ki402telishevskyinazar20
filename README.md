@@ -130,3 +130,10 @@ A PowerShell script is included to streamline the build process for both the Jav
 2. **Launch the Java Client**: Run the `Main.java` file from your IDE or use the packaged JAR.
 
 Once both components are running, the Java client will communicate with the Arduino server, allowing players to enjoy the Rock-Paper-Scissors game. For additional help, please consult the documentation or reach out for support.
+3. **Set Up JavaFX**: To run the Java client, you will need the JavaFX SDK. You can download it from the official JavaFX website. Once the SDK is downloaded, make sure you update the following paths:
+<your path to javafx-sdk>: This should point to the directory where you downloaded the JavaFX SDK.
+<your path to jar file with dependencies>: This should point to the location of the RPS-client-0.0.1-jar-with-dependencies.jar file within the deploy folder.
+
+3. **Run the Java Client**: Use PowerShell to run the Java client with the following command:
+   ```java --module-path "<your path to javafx-sdk>\lib\javafx.base.jar;<your path to javafx-sdk>\lib\javafx.controls.jar;<your path to javafx-sdk>\lib\javafx.fxml.jar;<your path to javafx-sdk>\lib\javafx.graphics.jar" --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics -jar "<your path to jar file with dependencies>"
+   ```
