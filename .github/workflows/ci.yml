@@ -35,3 +35,9 @@ jobs:
         run: |
           pwsh -File .github/scripts/localCI.ps1 -ComPort "" -BaudRate ""
         shell: pwsh
+
+      - name: Upload deploy directory as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: deploy-folder
+          path: deploy
