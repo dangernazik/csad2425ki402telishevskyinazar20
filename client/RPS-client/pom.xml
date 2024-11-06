@@ -5,7 +5,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>RPS-client</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 
 	<properties>
@@ -58,40 +58,29 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
+			<scope>provided</scope>
 			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
+			<scope>provided</scope>
 			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
+			<scope>provided</scope>
 			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
+			<scope>provided</scope>
 			<version>${javafx.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.15.2</version> <!-- Use the latest version available -->
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.15.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>2.15.2</version>
-		</dependency>
 	</dependencies>
+
 
 	<build>
 		<plugins>
@@ -105,7 +94,7 @@
 				</descriptorRefs>
 				<archive>
 					<manifest>
-						<mainClass>com.example.RPS_client.RPSGame.RPSApp</mainClass>
+						<mainClass>com.example.RPS_client.Main</mainClass>
 					</manifest>
 				</archive>
 			</configuration>
@@ -143,7 +132,7 @@
 			<configuration>
 				<archive>
 					<manifest>
-						<mainClass>com.example.RPS_client.RPSGame.RPSApp</mainClass>
+						<mainClass>com.example.RPS_client.Main</mainClass>
 					</manifest>
 				</archive>
 			</configuration>
@@ -168,7 +157,7 @@
 				</execution>
 			</executions>
 			<configuration>
-				<mainClass>com.example.RPS_client.RPSGame.RPSApp</mainClass>
+				<mainClass>com.example.RPS_client.Main</mainClass>
 			</configuration>
 		</plugin>
 	</plugins>
