@@ -28,7 +28,7 @@ Write-Host "=== Client Application Build and Test ==="
 Set-Location $CLIENT_PROJECT_PATH
 
 Write-Host "Compiling Client project..."
-& mvn clean compile -B
+& mvn clean compile -q
 
 Write-Host "Running tests..."
 & mvn test
