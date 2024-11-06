@@ -1,3 +1,8 @@
+param(
+    [string]$ComPort = "COM3",  # Значення за замовчуванням для локального запуску
+    [int]$BaudRate = 9600       # Типова швидкість, яка може використовуватися при потребі
+)
+
 # Set the error action preference to stop on errors
 $ErrorActionPreference = "Stop"
 
@@ -16,7 +21,7 @@ if (-Not (Test-Path $DEPLOY_DIR)) {
 Write-Host "Current directory: $(Get-Location)"
 Write-Host "Deploy directory exists: $(Test-Path $DEPLOY_DIR)"
 
-Write-Host "`n === Client Application Build and Test ==="
+Write-Host "=== Client Application Build and Test ==="
 
 Set-Location $CLIENT_PROJECT_PATH
 
@@ -43,7 +48,11 @@ Write-Host "=== Server Application Build ==="
 Write-Host "Compiling Arduino project..."
 & arduino-cli compile --fqbn arduino:avr:uno "$SERVER_PROJECT_PATH\RPS-server.ino"
 
-Write-Host "Uploading program to the board..."
-& arduino-cli upload -p COM3 --fqbn arduino:avr:uno "$SERVER_PROJECT_PATH\RPS-server.ino"  # Змініть на правильний COM-порт
+if ($ComPort -ne "") {
+    Write-Host "Uploading program to the board on port $ComPort with baud rate $BaudRate..."
+    & arduino-cli upload -p $ComPort --fqbn arduino:avr:uno "$SERVER_PROJECT_PATH\RPS-server.ino"
+} else {
+    Write-Host "Skipping Arduino upload as COM port is not specified (GitHub CI environment)"
+}
 
 Write-Host "CI completed successfully."
