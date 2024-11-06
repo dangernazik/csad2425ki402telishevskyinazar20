@@ -125,15 +125,18 @@ A PowerShell script is included to streamline the build process for both the Jav
 
 ## 5. Running the Game
 
-1. **Start the Arduino Server**: Ensure the Arduino is connected and the code is uploaded.
+1. Start the Arduino Server: Ensure the Arduino is connected and the code is uploaded.
 
-2. **Launch the Java Client**: Run the `Main.java` file from your IDE or use the packaged JAR.
+2. Download the JAR Files from GitHub Actions: After the CI process completes successfully on GitHub Actions, you can download the `deploy` directory artifact from Task3. The artifact contains the packaged JAR files. To access the artifact:
+   - Navigate to the Actions tab in your GitHub repository.
+   - Select the Task3 workflow run.
+   - Find the Artifacts section on the page and download the `deploy` directory. This will contain the packaged `RPS-client` JAR file.
 
-Once both components are running, the Java client will communicate with the Arduino server, allowing players to enjoy the Rock-Paper-Scissors game. For additional help, please consult the documentation or reach out for support.
-3. **Set Up JavaFX**: To run the Java client, you will need the JavaFX SDK. You can download it from the official JavaFX website. Once the SDK is downloaded, make sure you update the following paths:
-<your path to javafx-sdk>: This should point to the directory where you downloaded the JavaFX SDK.
-<your path to jar file with dependencies>: This should point to the location of the RPS-client-0.0.1-jar-with-dependencies.jar file within the deploy folder.
+3. Set Up JavaFX: To run the Java client, you will need the JavaFX SDK. You can download it from the official JavaFX website. Once the SDK is downloaded, make sure you update the following paths:
+   - `<your path to javafx-sdk>`: This should point to the directory where you downloaded the JavaFX SDK.
+   - `<your path to jar file with dependencies>`: This should point to the location of the `RPS-client-0.0.1-jar-with-dependencies.jar` file within the `deploy` folder.
 
-3. **Run the Java Client**: Use PowerShell to run the Java client with the following command:
-   ```java --module-path "<your path to javafx-sdk>\lib\javafx.base.jar;<your path to javafx-sdk>\lib\javafx.controls.jar;<your path to javafx-sdk>\lib\javafx.fxml.jar;<your path to javafx-sdk>\lib\javafx.graphics.jar" --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics -jar "<your path to jar file with dependencies>"
-   ```
+4. Run the Java Client: Use PowerShell to run the Java client with the following command:
+   'java --module-path "<your path to javafx-sdk>\lib\javafx.base.jar;<your path to javafx-sdk>\lib\javafx.controls.jar;<your path to javafx-sdk>\lib\javafx.fxml.jar;<your path to javafx-sdk>\lib\javafx.graphics.jar" --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics -jar "<your path to jar file with dependencies>"'
+
+Replace the placeholders `<your path to javafx-sdk>` and `<your path to jar file with dependencies>` with the appropriate paths on your system.
