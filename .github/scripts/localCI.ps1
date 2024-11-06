@@ -8,8 +8,10 @@ $ErrorActionPreference = "Stop"
 
 Write-Host "Starting CI process for Java and Arduino..."
 
-# Встановлюємо кореневу директорію на поточний каталог, в якому запускається скрипт
-$ROOT_PROJECT_PATH = (Get-Location).Path
+# Переходимо на два рівні вище поточного каталогу
+$ROOT_PROJECT_PATH = (Get-Location).Path | Split-Path -Parent | Split-Path -Parent
+
+# Встановлюємо інші шляхи відносно нового кореневого шляху
 $CLIENT_PROJECT_PATH = Join-Path -Path $ROOT_PROJECT_PATH -ChildPath "client\RPS-client"
 $SERVER_PROJECT_PATH = Join-Path -Path $ROOT_PROJECT_PATH -ChildPath "server\RPS-server"
 $DEPLOY_DIR = Join-Path -Path $ROOT_PROJECT_PATH -ChildPath "deploy"
