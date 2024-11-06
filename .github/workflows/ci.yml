@@ -37,7 +37,7 @@ jobs:
         shell: pwsh
 
       - name: Upload deploy directory as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: deploy-folder
           path: deploy
