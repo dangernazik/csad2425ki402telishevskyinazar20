@@ -9,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  java:
+  build:
     runs-on: windows-latest
 
     steps:
@@ -23,27 +23,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build with Maven
-        run: mvn clean compile -B
-        working-directory: client/RPS-client
-
-      - name: Package JAR
-        run: mvn package
-        working-directory: client/RPS-client
-
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: built-app
-          path: client/RPS-client/target/*.jar
-
-  arduino:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Set up Arduino CLI
         uses: arduino/setup-arduino-cli@v1
         with:
@@ -52,12 +31,13 @@ jobs:
       - name: Install Arduino AVR platform
         run: arduino-cli core install arduino:avr
 
-      - name: Build Arduino Project
+      - name: Run PowerShell CI Script
         run: |
-          arduino-cli compile --fqbn arduino:avr:uno server/RPS-server/RPS-server.ino
+          pwsh -File .github/scripts/localCI.ps1 -ComPort "" -BaudRate ""
+        shell: pwsh
 
-      - name: Upload Arduino Build Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload deploy directory as artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: arduino-build
-          path: server/RPS-server/build/*
+          name: deploy-folder
+          path: deploy

@@ -1,0 +1,68 @@
+.root {
+    -fx-background-color: #2e3440; /* фон вікна */
+    -fx-font-family: "Arial"; /* шрифт для всіх елементів */
+}
+
+.button {
+    -fx-background-color: #88c0d0; /* фон кнопок */
+    -fx-text-fill: #2e3440; /* текст кнопок */
+    -fx-font-size: 16px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+}
+
+.label {
+    -fx-text-fill: #d8dee9; /* текст для всіх меток */
+    -fx-font-size: 16px;
+}
+
+.text-field {
+    -fx-background-color: #4c566a; /* фон текстових полів */
+    -fx-text-fill: #eceff4; /* текст в текстових полях */
+    -fx-font-size: 16px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.choice-box {
+    -fx-background-color: #4c566a;
+    -fx-text-fill: #eceff4;
+    -fx-font-size: 16px;
+}
+
+.alert {
+    -fx-background-color: #3b4252;
+    -fx-text-fill: #eceff4;
+    -fx-font-size: 16px;
+}
+
+/* Додатково стилізація для кнопок при наведенні */
+.button:hover {
+    -fx-background-color: #5e81ac;
+    -fx-cursor: hand;
+}
+.menu-bar {
+    -fx-background-color: #2e3440; /* Темний фон */
+}
+
+/* Стиль для Menu */
+.menu {
+    -fx-text-fill: #d8dee9; /* Колір тексту для меню */
+    -fx-font-size: 14px;
+    -fx-padding: 5px 15px;
+}
+
+/* Стиль для MenuItem */
+.menu-item {
+    -fx-text-fill: #88c0d0; /* Колір тексту для пунктів меню */
+    -fx-font-size: 14px;
+    -fx-background-color: #4c566a; /* Фон для пунктів меню */
+    -fx-padding: 8px 10px;
+}
+
+/* Ефект наведення на пункт меню */
+.menu-item:hover {
+    -fx-background-color: #5e81ac; /* Інший фон при наведенні */
+    -fx-text-fill: #eceff4;
+}
