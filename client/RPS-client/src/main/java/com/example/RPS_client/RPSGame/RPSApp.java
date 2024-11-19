@@ -28,12 +28,34 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
+/**
+ * @file RPSApp.java
+ * @brief The main application class for the Rock-Paper-Scissors game.
+ * @details Initializes the application, sets up the main menu, and handles game start and loading functionality.
+ */
 public class RPSApp extends Application {
+
+    /**
+     * @brief Player 1 instance.
+     * @details Represents the first player in the game.
+     */
     private RPSPlayer player1;
+
+    /**
+     * @brief Player 2 instance.
+     * @details Represents the second player in the game.
+     */
     private RPSPlayer player2;
 
+    /**
+     * @brief The game controller for managing server communication.
+     */
     private GameController gameController;
 
+    /**
+     * @brief Constructor for the RPSApp class.
+     * @details Attempts to initialize the game controller by connecting to the server. Logs an error if the connection fails.
+     */
     public RPSApp() {
         try {
             gameController = new GameController(0);
@@ -42,16 +64,23 @@ public class RPSApp extends Application {
         }
     }
 
+    /**
+     * @brief Starts the JavaFX application.
+     * @param primaryStage The main stage of the JavaFX application.
+     * @details Sets up the main menu, logo, and game options. Adds event handlers for starting a new game and loading a game.
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Rock Paper Scissors Menu");
 
+        // Logo setup
         Image logoImage = new Image(Objects.requireNonNull(RPSApp.class.getResourceAsStream("/images/Logo.png")));
         ImageView logoImageView = new ImageView(logoImage);
         logoImageView.setFitWidth(300);
         logoImageView.setPreserveRatio(true);
         logoImageView.setSmooth(true);
 
+        // Menu setup
         MenuBar menuBar = new MenuBar();
         Menu gameMenu = new Menu("Game");
         MenuItem newGameItem = new MenuItem("New Game");
@@ -60,6 +89,7 @@ public class RPSApp extends Application {
         gameMenu.getItems().addAll(newGameItem, loadGameItem);
         menuBar.getMenus().add(gameMenu);
 
+        // Event handlers for menu items
         newGameItem.setOnAction(e -> showGameModeSelection());
 
         loadGameItem.setOnAction(e -> {
@@ -79,10 +109,11 @@ public class RPSApp extends Application {
             }
         });
 
+        // Layout and scene setup
         VBox vbox = new VBox(10, logoImageView, menuBar);
         Scene scene = new Scene(vbox, 300, 350);
 
-        // Додавання CSS-стилю
+        // Adding CSS styles
         scene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
 
         primaryStage.setScene(scene);
@@ -90,19 +121,25 @@ public class RPSApp extends Application {
         primaryStage.show();
     }
 
-
+    /**
+     * @brief Loads game data from a JSON file.
+     * @param file The file containing the saved game data.
+     * @throws IOException If an error occurs while reading the file.
+     * @details Parses the JSON file to extract game information such as player names, moves, and winner.
+     */
     private void loadGame(File file) throws IOException {
         Gson gson = new Gson();
 
+        // Inner class to represent game data structure
         class GameData {
             String Player1Name;
             String Player2Name;
             String Player1Move;
             String Player2Move;
-            String Winner; // This can be null or empty if the game is ongoing
+            String Winner; // Can be null or empty if the game is ongoing
         }
 
-        // Check if the file exists and is readable
+        // Check if file exists
         if (file == null || !file.exists()) {
             System.out.println("File does not exist: " + (file != null ? file.getAbsolutePath() : "null"));
             return;
@@ -111,19 +148,16 @@ public class RPSApp extends Application {
         try (Reader reader = new FileReader(file)) {
             GameData gameData = gson.fromJson(reader, GameData.class);
 
-            // Check if gameData is null
             if (gameData == null) {
                 System.out.println("No game data found or JSON is malformed.");
-                return; // Exit the method early if there's an issue
+                return;
             }
 
-            // Output each field, checking for nulls and empty strings
             System.out.println("Player 1 Name: " + (gameData.Player1Name != null ? gameData.Player1Name : "Not Provided"));
             System.out.println("Player 2 Name: " + (gameData.Player2Name != null ? gameData.Player2Name : "Not Provided"));
             System.out.println("Player 1 Move: " + (gameData.Player1Move != null && !gameData.Player1Move.isEmpty() ? gameData.Player1Move : "Not Made"));
             System.out.println("Player 2 Move: " + (gameData.Player2Move != null && !gameData.Player2Move.isEmpty() ? gameData.Player2Move : "Not Made"));
             System.out.println("Winner: " + (gameData.Winner != null && !gameData.Winner.isEmpty() ? gameData.Winner : "Game Ongoing"));
-
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         } catch (JsonSyntaxException e) {
@@ -133,6 +167,10 @@ public class RPSApp extends Application {
         }
     }
 
+    /**
+     * @brief Displays the game mode selection menu.
+     * @details Allows the user to select a game mode: Player vs Player, Player vs AI, or AI vs AI.
+     */
     private void showGameModeSelection() {
         Stage modeStage = new Stage();
         modeStage.setTitle("Select Game Mode");
@@ -141,6 +179,7 @@ public class RPSApp extends Application {
         Button manVsAIButton = new Button(RPSMode.MAN_VS_AI.name().replace("_", " "));
         Button aiVsAIButton = new Button(RPSMode.AI_VS_AI.name().replace("_", " "));
 
+        // Event handlers for game modes
         manVsManButton.setOnAction(e -> {
             player1 = new RPSPlayer();
             player2 = new RPSPlayer();
@@ -166,6 +205,11 @@ public class RPSApp extends Application {
         modeStage.show();
     }
 
+    /**
+     * @brief Starts the AI vs AI game.
+     * @param modeStage The stage to close after selecting AI vs AI mode.
+     * @details Simulates a game between two AI players, displays their moves, and shows the result.
+     */
     private void startAiVsAiGame(Stage modeStage) {
         modeStage.close();
 
@@ -195,12 +239,9 @@ public class RPSApp extends Application {
             try {
                 gameController.sendModeAndMoves(RPSMode.AI_VS_AI.name(), RPSPlayer.Move.ROCK, RPSPlayer.Move.ROCK);
                 GameDTO gameResponseDto = gameController.receiveResult();
-                String resultText;
-                if (gameResponseDto.gameResult().equals("DRAW")) {
-                    resultText = "Draw";
-                } else {
-                    resultText = gameResponseDto.gameResult().equals("Player 1") ? "AI1" : "AI2";
-                }
+
+                String resultText = gameResponseDto.gameResult().equals("DRAW") ? "Draw"
+                        : (gameResponseDto.gameResult().equals("Player 1") ? "AI1" : "AI2");
 
                 String movesHistory = "AI 1 put " + gameResponseDto.player1Move().name() + ". "
                         + "AI 2 put " + gameResponseDto.player2Move().name();
@@ -222,9 +263,14 @@ public class RPSApp extends Application {
         gameScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         gameStage.setScene(gameScene);
         gameStage.show();
-
     }
 
+
+    /**
+     * @brief Displays a dialog for players to set their nicknames.
+     * @param gameMode The game mode selected (MAN_VS_MAN or MAN_VS_AI).
+     * @details Allows players to input their names and initializes the game based on the selected mode.
+     */
     private void setPlayerNicknames(RPSMode gameMode) {
         Stage nicknameStage = new Stage();
         nicknameStage.setTitle("Set Player Nicknames");
@@ -256,6 +302,11 @@ public class RPSApp extends Application {
         nicknameStage.show();
     }
 
+    /**
+     * @brief Starts a Man vs AI game.
+     * @param nicknameStage The stage where player nicknames were entered (will be closed).
+     * @details Allows a human player to make a move, and the AI generates its move. Displays the result and moves history.
+     */
     private void startManVsAiGame(Stage nicknameStage) {
         nicknameStage.close();
 
@@ -284,6 +335,7 @@ public class RPSApp extends Application {
         Label resultLabel = new Label();
         grid.add(resultLabel, 0, 3, 3, 1);
 
+        // Button for Player 1 to make a move and lock their choice.
         player1MakeMoveButton.setOnAction(e -> {
             if (player1Move.getValue() != null) {
                 player1.setMove(player1Move.getValue());
@@ -295,6 +347,7 @@ public class RPSApp extends Application {
             }
         });
 
+        // Button to play the game: sends moves to the server, receives the result, and updates UI.
         playButton.setOnAction(e -> {
             if (player1.getMove() != null) {
                 try {
@@ -327,6 +380,7 @@ public class RPSApp extends Application {
             }
         });
 
+        // Apply styles and display the game stage.
         Scene gameScene = new Scene(grid, 500, 300);
         gameScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         gameStage.setScene(gameScene);
@@ -334,6 +388,13 @@ public class RPSApp extends Application {
 
     }
 
+    /**
+     * @brief Starts a Man vs Man game.
+     * @param nicknameStage The stage where player nicknames were entered (will be closed).
+     * @param isLoaded Flag indicating if the game is being loaded from a saved state.
+     * @details Initializes the Man vs Man game UI. Handles player moves, game result calculation,
+     * and saving the game result to a JSON file.
+     */
     private void startManVsManGame(Stage nicknameStage, boolean isLoaded) {
         nicknameStage.close();
 
@@ -379,7 +440,7 @@ public class RPSApp extends Application {
                 player2MakeMoveButton.setDisable(true);
             }
         }
-
+        // Button for Player 1 to make a move and lock their choice.
         player1MakeMoveButton.setOnAction(e -> {
             if (player1Move.getValue() != null) {
                 player1.setMove(player1Move.getValue());
@@ -390,7 +451,7 @@ public class RPSApp extends Application {
                 resultLabel.setText("Player 1 must make a move!");
             }
         });
-
+        // Button for Player 2 to make a move and lock their choice.
         player2MakeMoveButton.setOnAction(e -> {
             if (player2Move.getValue() != null) {
                 player2.setMove(player2Move.getValue());
@@ -403,6 +464,8 @@ public class RPSApp extends Application {
         });
 
         String[] gameResultHolder = new String[1];
+
+        // Button to play the game: sends moves to the server, receives the result, and updates UI.
         playButton.setOnAction(e -> {
             try {
                 gameController.sendModeAndMoves(RPSMode.MAN_VS_MAN.name(), player1.getMove(), player2.getMove());
@@ -429,7 +492,7 @@ public class RPSApp extends Application {
                 alert.showAndWait();
             }
         });
-
+        // Button to save the game result to a JSON file.
         saveButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Game Result");
@@ -453,13 +516,23 @@ public class RPSApp extends Application {
                 }
             }
         });
-
+        // Apply styles and display the game stage.
         Scene gameScene = new Scene(grid, 500, 300);
         gameScene.getStylesheets().add(Objects.requireNonNull(RPSApp.class.getResource("/styles/main.css")).toExternalForm());
         gameStage.setScene(gameScene);
         gameStage.show();
     }
 
+
+    /**
+     * @brief Saves the game result to a JSON file.
+     * @param file The file to save the game result to.
+     * @param result The result of the game ("Player 1", "Player 2", or "Draw").
+     * @param player1 The first player object containing name and move.
+     * @param player2 The second player object containing name and move.
+     * @throws IOException If an I/O error occurs during file writing.
+     * @details Generates a JSON representation of the game data and saves it in a user-specified file.
+     */
     private void saveGameResult(File file, String result, RPSPlayer player1, RPSPlayer player2) throws IOException {
         // Create a GsonBuilder to enable pretty printing
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -480,6 +553,14 @@ public class RPSApp extends Application {
         }
     }
 
+
+    /**
+     * @brief Creates an ImageView for the given move.
+     * @param move The player's move (ROCK, PAPER, or SCISSORS).
+     * @return An ImageView displaying the corresponding move image.
+     * @details Maps the move to its corresponding image resource and configures
+     * the image view with a fixed width and aspect ratio preservation.
+     */
     private ImageView createMoveImage(RPSPlayer.Move move) {
         String imagePath = "";
 
@@ -501,6 +582,12 @@ public class RPSApp extends Application {
         return imageView;
     }
 
+
+    /**
+     * @brief Entry point of the application.
+     * @param args Command-line arguments.
+     * @details Launches the JavaFX application.
+     */
     public static void main(String[] args) {
         launch(args);
     }

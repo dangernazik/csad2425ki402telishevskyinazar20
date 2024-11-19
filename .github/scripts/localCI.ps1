@@ -44,6 +44,12 @@ Write-Host "Packaging JAR..."
 Write-Host "Copying JAR artifact to $DEPLOY_DIR..."
 Copy-Item -Path "target\*.jar" -Destination $DEPLOY_DIR
 
+Set-Location -Path "..\.."
+
+Write-Host "=== Doxygen documentation generation ==="
+Write-Host "Generating documentation..."
+doxygen Doxyfile
+
 Set-Location $ROOT_PROJECT_PATH
 Write-Host "=== Server Application Build ==="
 Write-Host "Compiling Arduino project..."
