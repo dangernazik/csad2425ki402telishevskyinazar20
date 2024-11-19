@@ -31,9 +31,19 @@ jobs:
       - name: Install Arduino AVR platform
         run: arduino-cli core install arduino:avr
 
-      - name: Add Doxygen to PATH
-        run: |
-          $env:PATH += ";D:\doxygen\bin"
+      - name: Install Doxygen
+          run: |
+            # Перевіряємо, чи є Doxygen в системному шляху
+            if (-not (Get-Command doxygen -ErrorAction SilentlyContinue)) {
+              Write-Host "Doxygen не знайдений. Встановлюємо Doxygen..."
+              # Завантаження Doxygen
+              Invoke-WebRequest -Uri https://doxygen.nl/files/doxygen-1.12.0.windows.x86_64.bin.zip -OutFile "doxygen.zip"
+              Expand-Archive -Path "doxygen.zip" -DestinationPath "doxygen"
+              # Додаємо шлях до Doxygen у змінну середовища PATH
+              $env:PATH += ";$PWD\doxygen\bin"
+            } else {
+              Write-Host "Doxygen вже встановлений."
+            }
 
       - name: Run PowerShell CI Script
         run: |
