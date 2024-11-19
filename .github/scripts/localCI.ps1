@@ -39,7 +39,7 @@ Write-Host "Copying test results to $DEPLOY_DIR\test-results..."
 Copy-Item -Path $TEST_RESULTS_DIR -Destination "$DEPLOY_DIR\tests" -Recurse -Force
 
 Write-Host "Packaging JAR..."
-& mvn package
+& mvn package -q
 
 Write-Host "Copying JAR artifact to $DEPLOY_DIR..."
 Copy-Item -Path "target\*.jar" -Destination $DEPLOY_DIR
