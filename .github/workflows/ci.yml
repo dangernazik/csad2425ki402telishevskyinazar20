@@ -31,6 +31,19 @@ jobs:
       - name: Install Arduino AVR platform
         run: arduino-cli core install arduino:avr
 
+      - name: Install Doxygen
+        run: |
+          $DoxygenUrl = "https://doxygen.nl/files/doxygen-1.12.0.win64.exe"
+          $DoxygenInstaller = "$env:Temp\doxygen_installer.exe"
+
+          # Завантажити інсталятор
+          Invoke-WebRequest -Uri $DoxygenUrl -OutFile $DoxygenInstaller
+
+          # Інсталювати Doxygen
+          Start-Process -FilePath $DoxygenInstaller -ArgumentList "/S" -Wait
+
+          # Додати Doxygen до PATH
+          $env:PATH += ";C:\Program Files\doxygen\bin"
 
       - name: Run PowerShell CI Script
         run: |
