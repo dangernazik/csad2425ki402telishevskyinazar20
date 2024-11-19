@@ -31,6 +31,10 @@ jobs:
       - name: Install Arduino AVR platform
         run: arduino-cli core install arduino:avr
 
+      - name: Add Doxygen to PATH
+        run: |
+          $env:PATH += ";D:\doxygen\bin"
+
       - name: Run PowerShell CI Script
         run: |
           pwsh -File .github/scripts/localCI.ps1 -ComPort "" -BaudRate ""
