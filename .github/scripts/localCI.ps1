@@ -46,9 +46,13 @@ Copy-Item -Path "target\*.jar" -Destination $DEPLOY_DIR
 
 Set-Location -Path "..\.."
 
-Write-Host "=== Doxygen documentation generation ==="
-Write-Host "Generating documentation..."
-doxygen Doxyfile
+if ($env:GITHUB_ACTIONS) {
+    Write-Host "Running in GitHub Actions environment. Skipping Doxygen documentation generation."
+} else {
+    Write-Host "=== Doxygen documentation generation ==="
+    Write-Host "Generating documentation..."
+    doxygen Doxyfile
+}
 
 Set-Location $ROOT_PROJECT_PATH
 Write-Host "=== Server Application Build ==="
