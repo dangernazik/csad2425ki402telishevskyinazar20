@@ -33,18 +33,17 @@ jobs:
 
       - name: Install Doxygen
         run: |
-          # Перевіряємо, чи є Doxygen в системному шляху
-          if (-not (Get-Command doxygen -ErrorAction SilentlyContinue)) {
-          Write-Host "Doxygen не знайдений. Встановлюємо Doxygen..."
-          # Завантаження Doxygen з офіційного джерела
-          Invoke-WebRequest -Uri https://github.com/doxygen/doxygen/releases/download/rel-1.12.0/doxygen-1.12.0-setup.exe -OutFile "doxygen-setup.exe"
-          # Інсталяція Doxygen
-          Start-Process -FilePath "doxygen-setup.exe" -ArgumentList "/S" -Wait
-          # Додаємо шлях до Doxygen у змінну середовища PATH
+          $DoxygenUrl = "https://doxygen.nl/files/doxygen-1.12.0.win64.exe"
+          $DoxygenInstaller = "$env:Temp\doxygen_installer.exe"
+
+          # Завантажити інсталятор
+          Invoke-WebRequest -Uri $DoxygenUrl -OutFile $DoxygenInstaller
+
+          # Інсталювати Doxygen
+          Start-Process -FilePath $DoxygenInstaller -ArgumentList "/S" -Wait
+
+          # Додати Doxygen до PATH
           $env:PATH += ";C:\Program Files\doxygen\bin"
-          } else {
-          Write-Host "Doxygen вже встановлений."
-          }
 
       - name: Run PowerShell CI Script
         run: |
