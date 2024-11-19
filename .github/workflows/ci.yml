@@ -32,7 +32,7 @@ jobs:
         run: arduino-cli core install arduino:avr
 
       - name: Install Doxygen
-          run: |
+        run: |
             # Перевіряємо, чи є Doxygen в системному шляху
             if (-not (Get-Command doxygen -ErrorAction SilentlyContinue)) {
               Write-Host "Doxygen не знайдений. Встановлюємо Doxygen..."
