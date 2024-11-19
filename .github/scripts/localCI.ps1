@@ -48,17 +48,6 @@ Set-Location -Path "..\.."
 
 Write-Host "=== Doxygen documentation generation ==="
 Write-Host "Generating documentation..."
-Write-Host "Checking if doxygen is installed..."
-if (-not (Get-Command doxygen -ErrorAction SilentlyContinue)) {
-    Write-Host "Doxygen is not installed. Installing..."
-    # Наприклад, для Windows, завантаження і встановлення doxygen:
-    Invoke-WebRequest -Uri https://doxygen.nl/files/doxygen-1.9.3.windows.x86_64.bin.zip -OutFile "doxygen.zip"
-    Expand-Archive -Path "doxygen.zip" -DestinationPath "doxygen"
-    $env:PATH += ";$PWD\doxygen\bin"
-    Write-Host "Doxygen installed and added to PATH."
-} else {
-    Write-Host "Doxygen is already installed."
-}
 doxygen Doxyfile
 
 Set-Location $ROOT_PROJECT_PATH
