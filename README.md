@@ -142,8 +142,5 @@ A PowerShell script is included to streamline the build process for both the Jav
 
 Replace the placeholders `<your path to javafx-sdk>` and `<your path to jar file with dependencies>` with the appropriate paths on your system.
 
- 
---- 
-
 # Task 4: Implementing a doxygen Documentation
 Run the loclCI.ps1 script and it will create documentation of prohect to deploy/docs folder.
