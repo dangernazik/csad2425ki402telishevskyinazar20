@@ -144,5 +144,5 @@ Replace the placeholders `<your path to javafx-sdk>` and `<your path to jar file
 
 
 # Task 4: Implementing a doxygen Documentation
-Run the loclCI.ps1 script and it will create documentation of prohect to deploy/docs folder.
+Run the localCI.ps1 script and it will create documentation of project to deploy/docs folder.
  develop
