@@ -130,3 +130,8 @@ A PowerShell script is included to streamline the build process for both the Jav
 2. **Launch the Java Client**: Run the `Main.java` file from your IDE or use the packaged JAR.
 
 Once both components are running, the Java client will communicate with the Arduino server, allowing players to enjoy the Rock-Paper-Scissors game. For additional help, please consult the documentation or reach out for support.
+ 
+--- 
+
+# Task 4: Implementing a doxygen Documentation
+Run the loclCI.ps1 script and it will create documentation of prohect to deploy/docs folder.
