@@ -160,6 +160,28 @@
 				<mainClass>com.example.RPS_client.RPSGame.RPSApp</mainClass>
 			</configuration>
 		</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.10</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<systemPropertyVariables>
+						<ci.environment>true</ci.environment>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
 	</plugins>
 	</build>
 
