@@ -132,6 +132,7 @@ A PowerShell script is included to streamline the build process for both the Jav
    - Select the Task3 workflow run.
    - Find the Artifacts section on the page and download the `deploy` directory. This will contain the packaged `RPS-client` JAR file.
 
+
 3. **Set Up JavaFX**: To run the Java client, you will need the JavaFX SDK. You can download it from the official JavaFX website. Once the SDK is downloaded, make sure you update the following paths:
    - `<your path to javafx-sdk>`: This should point to the directory where you downloaded the JavaFX SDK.
    - `<your path to jar file with dependencies>`: This should point to the location of the `RPS-client-0.0.1-jar-with-dependencies.jar` file within the `deploy` folder.
@@ -146,3 +147,6 @@ Replace the placeholders `<your path to javafx-sdk>` and `<your path to jar file
 # Task 4: Implementing a doxygen Documentation
 Run the localCI.ps1 script and it will create documentation of project to deploy/docs folder.
  develop
+
+# Task 5: Implementing a Unit tests statistics
+Run the localCI.ps1 script and it will create test statistics of project to deploy/test-result folder.

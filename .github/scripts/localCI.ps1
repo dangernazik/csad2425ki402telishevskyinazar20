@@ -35,9 +35,40 @@ Write-Host "Running tests..."
 & mvn test
 
 $TEST_RESULTS_DIR = "target\surefire-reports"
-Write-Host "Copying test results to $DEPLOY_DIR\test-results..."
-Copy-Item -Path $TEST_RESULTS_DIR -Destination "$DEPLOY_DIR\tests" -Recurse -Force
+$TEST_RESULTS_DEST = Join-Path -Path $DEPLOY_DIR -ChildPath "tests"
+Write-Host "Copying test results to $TEST_RESULTS_DEST..."
+Copy-Item -Path $TEST_RESULTS_DIR -Destination $TEST_RESULTS_DEST -Recurse -Force
 
+Write-Host "=== Generating Tests Statistics ==="
+Write-Host "Running JaCoCo report generation..."
+& mvn jacoco:report
+
+Write-Host "Copying JaCoCo test statistics to $DEPLOY_DIR..."
+$JACOCO_REPORT_PATH = "target/site/jacoco/index.html"
+$JACOCO_DEST_PATH = Join-Path -Path $DEPLOY_DIR -ChildPath "test-results"
+if (-Not (Test-Path $JACOCO_DEST_PATH)) {
+    New-Item -ItemType Directory -Path $JACOCO_DEST_PATH
+}
+Copy-Item -Path $JACOCO_REPORT_PATH -Destination $JACOCO_DEST_PATH -Force
+
+Set-Location (Join-Path -Path $CLIENT_PROJECT_PATH -ChildPath "../..")
+Write-Host "Returned to root directory: $(Get-Location)"
+
+Write-Host "=== Uploading Test Results ==="
+if ($env:GITHUB_WORKSPACE) {
+    Write-Host "Uploading artifact for GitHub Actions..."
+    # Завантаження результатів через GitHub Actions
+    Write-Output "Uploading test results artifact..."
+    Write-Output "::set-output name=test_results::$TEST_RESULTS_DEST"
+    Write-Output "::group::Uploading test-results"
+    Write-Host "Uploading $TEST_RESULTS_DEST as test-results artifact..."
+    $UploadCommand = "actions/upload-artifact@v3 --name test-results --path $TEST_RESULTS_DEST"
+    & bash -c $UploadCommand
+    Write-Output "::endgroup::"
+} else {
+    Write-Host "Local environment detected. Skipping artifact upload."
+}
+Set-Location $CLIENT_PROJECT_PATH
 Write-Host "Packaging JAR..."
 & mvn package -q -B
 
