@@ -141,3 +141,8 @@ A PowerShell script is included to streamline the build process for both the Jav
    `java --module-path "<your path to javafx-sdk>\lib\javafx.base.jar;<your path to javafx-sdk>\lib\javafx.controls.jar;<your path to javafx-sdk>\lib\javafx.fxml.jar;<your path to javafx-sdk>\lib\javafx.graphics.jar" --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics -jar "<your path to jar file with dependencies>"`
 
 Replace the placeholders `<your path to javafx-sdk>` and `<your path to jar file with dependencies>` with the appropriate paths on your system.
+
+
+# Task 4: Implementing a doxygen Documentation
+Run the localCI.ps1 script and it will create documentation of project to deploy/docs folder.
+ develop

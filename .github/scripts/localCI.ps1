@@ -39,10 +39,20 @@ Write-Host "Copying test results to $DEPLOY_DIR\test-results..."
 Copy-Item -Path $TEST_RESULTS_DIR -Destination "$DEPLOY_DIR\tests" -Recurse -Force
 
 Write-Host "Packaging JAR..."
-& mvn package
+& mvn package -q -B
 
 Write-Host "Copying JAR artifact to $DEPLOY_DIR..."
 Copy-Item -Path "target\*.jar" -Destination $DEPLOY_DIR
+
+Set-Location -Path "..\.."
+
+if ($env:GITHUB_ACTIONS) {
+    Write-Host "Running in GitHub Actions environment. Skipping Doxygen documentation generation."
+} else {
+    Write-Host "=== Doxygen documentation generation ==="
+    Write-Host "Generating documentation..."
+    doxygen Doxyfile
+}
 
 Set-Location $ROOT_PROJECT_PATH
 Write-Host "=== Server Application Build ==="

@@ -1,4 +1,4 @@
-module RPS.client {
+module com.example.RPS_client {
     requires com.fazecast.jSerialComm;
     requires javafx.controls;
     requires javafx.fxml;

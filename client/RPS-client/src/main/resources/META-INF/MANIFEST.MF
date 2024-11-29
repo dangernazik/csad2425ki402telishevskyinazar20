@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.example.RPS_client.RPSGame.RPSApp
+Main-Class: com.example.RPS_client.Main
 
