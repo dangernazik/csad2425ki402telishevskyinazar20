@@ -150,10 +150,3 @@ Run the localCI.ps1 script and it will create documentation of project to deploy
 
 # Task 5: Implementing a Unit tests statistics
 Run the localCI.ps1 script and it will create test statistics of project to deploy/test-result folder.
-
-
-
-# Task 4: Implementing a doxygen Documentation
-Run the localCI.ps1 script and it will create documentation of project to deploy/docs folder.
- develop
-develop
